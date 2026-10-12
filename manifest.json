@@ -1,0 +1,9 @@
+{
+  "name": "Kamba Serviços",
+  "short_name": "Kamba",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f5f7f8",
+  "theme_color": "#f47721",
+  "lang": "pt-AO"
+}
