@@ -1,9 +1,10 @@
 {
   "name": "Kamba Serviços",
   "short_name": "Kamba",
+  "description": "Encontre profissionais locais em Angola, de forma simples e directa.",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#f5f7f8",
-  "theme_color": "#f47721",
-  "lang": "pt-AO"
+  "background_color": "#ffffff",
+  "theme_color": "#087451",
+  "icons": []
 }

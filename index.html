@@ -1,10 +1,89 @@
-<!doctype html><html lang="pt"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#f47721"><link rel="manifest" href="manifest.json"><link rel="stylesheet" href="styles.css"><title>Kamba Serviços</title></head><body>
-<header><a class="brand" href="#" data-view="home"><b>K</b><span>Kamba <small>SERVIÇOS</small></span></a><button id="menu">☰</button><nav id="nav"><button data-view="home">Início</button><button data-view="search">Encontrar profissional</button><button data-view="request">Pedir serviço</button><button data-view="register">Ser profissional</button><button data-view="dashboard">Painel</button></nav></header>
-<main>
-<section id="home" class="view"><div class="hero"><div><small>PLATAFORMA DE SERVIÇOS EM ANGOLA</small><h1>Precisas de ajuda?<br><em>Encontra quem sabe fazer.</em></h1><p>Descobre profissionais, pede um serviço e partilha a tua experiência.</p><button class="primary" data-view="search">Encontrar profissional</button> <button data-view="register">Oferecer serviços</button><p class="note">Protótipo inicial: os dados ficam guardados apenas neste navegador.</p></div><div class="art">🤝<span>🔧 Reparações</span><span>🧹 Limpeza</span><span>⚡ Electricidade</span></div></div><h2>Serviços populares</h2><div id="categories" class="categories"></div></section>
-<section id="search" class="view hidden"><h1>Encontrar profissionais</h1><p>Pesquisa por categoria, serviço ou localização.</p><div class="panel filters"><label>Pesquisa<input id="q" placeholder="Ex.: canalizador"></label><label>Categoria<select id="scat"></select></label><label>Província<input id="sprov" placeholder="Luanda"></label><label>Município<input id="smun" placeholder="Viana"></label></div><div id="results" class="cards"></div></section>
-<section id="register" class="view hidden"><h1>Registar profissional</h1><p>O registo não significa que a identidade ou qualificações foram verificadas.</p><form id="proform" class="panel form"><label>Nome profissional<input name="name" required maxlength="100"></label><label>Telefone/WhatsApp<input name="contact" required maxlength="40" placeholder="+244..."></label><label>Categoria<select name="category" class="cats" required></select></label><label>Província<input name="province" required></label><label>Município<input name="municipality" required></label><label>Disponibilidade<select name="availability"><option>Disponível</option><option>Fins de semana</option><option>Por marcação</option><option>Indisponível</option></select></label><label>Preço indicativo<input name="price" placeholder="A combinar"></label><label>Experiência<input name="experience" placeholder="Ex.: 4 anos"></label><label class="wide">Descrição dos serviços<textarea name="description" required maxlength="1000" rows="4"></textarea></label><label class="wide check"><input type="checkbox" name="consent" required> Autorizo a apresentação do meu perfil e contacto para fins de prestação de serviços.</label><button class="primary wide">Criar perfil</button></form></section>
-<section id="request" class="view hidden"><h1>Pedir um serviço</h1><p>Descreve o trabalho de que precisas.</p><form id="reqform" class="panel form"><label>Nome<input name="client" required></label><label>Contacto<input name="contact" required placeholder="+244..."></label><label>Serviço<select name="category" class="cats" required></select></label><label>Província<input name="province" required></label><label>Município<input name="municipality" required></label><label>Quando?<select name="when"><option>O mais breve possível</option><option>Hoje</option><option>Esta semana</option><option>Data a combinar</option></select></label><label class="wide">Descrição<textarea name="description" rows="4" required maxlength="1200"></textarea></label><label class="wide check"><input type="checkbox" name="consent" required> Autorizo o uso dos dados para gerir este pedido e partilhar os detalhes necessários com profissionais adequados.</label><button class="primary wide">Guardar pedido</button></form></section>
-<section id="dashboard" class="view hidden"><h1>Painel de demonstração</h1><p>Estes registos só existem neste navegador. Não é ainda um painel administrativo privado.</p><div id="stats" class="stats"></div><div class="panel"><h2>Pedidos</h2><button id="export">Exportar dados JSON</button><div id="requests"></div></div><div class="panel"><h2>Profissionais</h2><div id="pros"></div><button id="clear" class="danger">Apagar todos os dados locais</button></div></section>
-<section id="profile" class="view hidden"><button data-view="search">← Voltar</button><div id="detail"></div></section>
-</main><footer><b>Kamba Serviços</b><p>Juntos, conectamos quem precisa a quem sabe fazer.</p><small>Versão de demonstração · Não processa pagamentos</small></footer><div id="toast"></div><script src="app.js"></script></body></html>
+<!doctype html>
+<html lang="pt-AO">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#087451">
+  <meta name="color-scheme" content="light">
+  <meta name="description" content="Kamba Serviços — encontre profissionais locais em Angola, de forma simples e directa.">
+  <title>Kamba Serviços | Encontre quem sabe fazer</title>
+  <link rel="preconnect" href="https://images.unsplash.com">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="manifest" href="manifest.json">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="#inicio" aria-label="Kamba Serviços - página inicial">
+      <span class="brand-symbol">K</span><span class="brand-name">Kamba <strong>Serviços</strong><small>Serviços de confiança, mais perto de si.</small></span>
+    </a>
+    <button class="menu-toggle" id="menuButton" aria-label="Abrir menu" aria-expanded="false">☰</button>
+    <nav class="main-nav" id="mainNav" aria-label="Navegação principal">
+      <a href="#inicio">Início</a><a href="#servicos">Categorias</a><a href="#profissionais">Profissionais</a><a href="#como-funciona">Como funciona</a>
+      <a class="nav-login" href="#profissionais">Encontrar serviço</a><a class="nav-join" href="#registar">Sou profissional</a>
+    </nav>
+  </header>
+  <main>
+    <section class="hero" id="inicio">
+      <img class="hero-image" src="https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=1900&q=88" alt="Electricista profissional a trabalhar numa instalação" fetchpriority="high">
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <span class="eyebrow-pill"><span></span> ANGOLA · SERVIÇOS PROFISSIONAIS</span>
+        <h1>Encontre o serviço que precisa, <em>com quem sabe fazer.</em></h1>
+        <p class="hero-description">Profissionais locais para as tarefas do dia a dia. Pesquise, compare e entre em contacto directamente — sem criar uma conta.</p>
+        <div class="hero-actions"><a class="button button-bright" href="#pesquisa">Encontrar um profissional <span aria-hidden="true">↗</span></a><a class="button button-outline" href="#registar">Oferecer os meus serviços</a></div>
+        <div class="hero-trust"><span><b>✓</b> Pesquisa sem cadastro</span><span><b>✓</b> Contacto directo</span><span><b>✓</b> Em Angola</span></div>
+      </div>
+      <div class="hero-slogan">Juntos, conectamos<br>quem precisa a quem<br><strong>sabe fazer.</strong></div>
+    </section>
+
+    <section class="search-section" id="pesquisa" aria-label="Pesquisar profissionais">
+      <div class="search-heading"><span class="search-icon" aria-hidden="true">⌕</span><div><h2>De que serviço precisa?</h2><p>Comece pela tarefa ou pela especialidade.</p></div></div>
+      <form id="searchForm" class="search-form">
+        <label class="search-field"><span aria-hidden="true">⌕</span><span class="sr-only">Serviço ou profissional</span><input id="searchInput" placeholder="Ex.: canalizador, electricista…" autocomplete="off"></label>
+        <label class="search-field location-field"><span aria-hidden="true">⌖</span><span class="sr-only">Província</span><select id="provinceFilter"><option value="">Todas as províncias</option><option>Luanda</option><option>Benguela</option><option>Huíla</option><option>Huambo</option><option>Cabinda</option><option>Namibe</option><option>Outra</option></select></label>
+        <button class="button button-primary search-button" type="submit">Pesquisar <span aria-hidden="true">→</span></button>
+      </form>
+      <p class="search-footnote"><span>✓</span> Sem conta, sem complicações. Fale directamente com o profissional.</p>
+    </section>
+
+    <section class="section categories-section" id="servicos">
+      <div class="section-head"><div><p class="eyebrow">ENCONTRE O QUE PROCURA</p><h2>Serviços para o seu <span>dia a dia.</span></h2></div><p>Escolha uma categoria e encontre alguém que sabe fazer.</p></div>
+      <div class="category-grid" id="categoryGrid">
+        <button class="category-card" data-category="Construção"><img src="https://images.unsplash.com/photo-1503387762-592a786c2a78?auto=format&fit=crop&w=700&q=80" alt="Profissional a trabalhar numa obra" loading="lazy"><span class="category-body"><strong>Construção</strong><small>Obras e acabamentos</small><span class="category-arrow">↗</span></span></button>
+        <button class="category-card" data-category="Electricidade"><img src="https://images.unsplash.com/photo-1621905252507-b35492cc74b4?auto=format&fit=crop&w=700&q=80" alt="Trabalho de electricidade" loading="lazy"><span class="category-body"><strong>Electricidade</strong><small>Instalações e reparações</small><span class="category-arrow">↗</span></span></button>
+        <button class="category-card" data-category="Canalização"><img src="https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?auto=format&fit=crop&w=700&q=80" alt="Ferramentas de canalização" loading="lazy"><span class="category-body"><strong>Canalização</strong><small>Água e instalações</small><span class="category-arrow">↗</span></span></button>
+        <button class="category-card" data-category="Limpeza"><img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=700&q=80" alt="Limpeza profissional" loading="lazy"><span class="category-body"><strong>Limpeza</strong><small>Casas e escritórios</small><span class="category-arrow">↗</span></span></button>
+        <button class="category-card" data-category="Beleza"><img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=700&q=80" alt="Serviços profissionais de beleza" loading="lazy"><span class="category-body"><strong>Beleza</strong><small>Cabelo e cuidados</small><span class="category-arrow">↗</span></span></button>
+        <button class="category-card" data-category="Transporte"><img src="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?auto=format&fit=crop&w=700&q=80" alt="Transporte e logística" loading="lazy"><span class="category-body"><strong>Transporte</strong><small>Entregas e mudanças</small><span class="category-arrow">↗</span></span></button>
+        <button class="category-card" data-category="Tecnologia"><img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=700&q=80" alt="Computador para serviços de tecnologia" loading="lazy"><span class="category-body"><strong>Tecnologia</strong><small>Computadores e suporte</small><span class="category-arrow">↗</span></span></button>
+        <button class="category-card" data-category="Outro"><img src="https://images.unsplash.com/photo-1581244277943-fe4a9c777189?auto=format&fit=crop&w=700&q=80" alt="Ferramentas para vários serviços" loading="lazy"><span class="category-body"><strong>Outros serviços</strong><small>Mais especialidades</small><span class="category-arrow">↗</span></span></button>
+      </div>
+    </section>
+
+    <section class="promise-band"><div><p class="eyebrow">A NOSSA PROMESSA</p><h2>Encontrar ajuda deve ser <span>simples.</span></h2><p>Menos passos, mais contacto directo e profissionais locais ao seu alcance.</p></div><div class="promise-points"><span><b>01</b> Pesquisa sem cadastro</span><span><b>02</b> Contacto por WhatsApp ou telefone</span><span><b>03</b> Profissionais por localização</span></div></section>
+
+    <section class="section professionals-section" id="profissionais">
+      <div class="section-head"><div><p class="eyebrow">TALENTO LOCAL</p><h2>Conheça os <span>profissionais.</span></h2></div><p id="professionalCount">Os primeiros profissionais podem começar aqui.</p></div>
+      <div id="professionalList" class="professional-grid"><div class="empty-state"><div class="empty-photo"><img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1000&q=85" alt="Profissional a trabalhar numa obra" loading="lazy"></div><div class="empty-copy"><span class="eyebrow">A REDE ESTÁ A CRESCER</span><h3>Seja dos primeiros a ser encontrado.</h3><p>Estamos a preparar o directório. Se presta serviços, registe-se gratuitamente para dar o primeiro passo.</p><a class="button button-primary" href="#registar">Registar como profissional <span aria-hidden="true">→</span></a></div></div></div>
+    </section>
+
+    <section class="how-section" id="como-funciona"><div class="section-head"><div><p class="eyebrow">SEM COMPLICAÇÕES</p><h2>É tão simples <span>quanto parece.</span></h2></div></div><div class="steps-grid"><article class="step-card"><span class="step-number">01</span><div class="step-symbol">⌕</div><h3>Pesquise</h3><p>Escolha o serviço e a localização.</p></article><article class="step-card"><span class="step-number">02</span><div class="step-symbol">▤</div><h3>Veja os perfis</h3><p>Conheça as especialidades e a experiência.</p></article><article class="step-card"><span class="step-number">03</span><div class="step-symbol">↗</div><h3>Entre em contacto</h3><p>Use o WhatsApp ou ligue directamente.</p></article></div></section>
+
+    <section class="join-banner" id="registar"><div class="join-image"><img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=1000&q=85" alt="Profissional a preparar material de trabalho" loading="lazy"></div><div class="join-copy"><p class="eyebrow">PARA QUEM SABE FAZER</p><h2>O seu talento merece <span>ser encontrado.</span></h2><p>Crie o seu perfil gratuitamente e apresente os seus serviços a mais pessoas.</p><a class="button button-white" href="#formulario-profissional">Quero registar-me <span aria-hidden="true">→</span></a></div><div class="join-benefits"><span>✓ Cadastro gratuito</span><span>✓ Contacto directo com clientes</span><span>✓ Mais visibilidade para o seu trabalho</span></div></section>
+
+    <section class="section register-section" id="formulario-profissional"><div class="register-intro"><p class="eyebrow">REGISTO GRATUITO</p><h2>Vamos apresentar o <span>seu trabalho.</span></h2><p>Preencha os dados essenciais. Nesta versão de demonstração, o registo fica apenas guardado neste navegador e ainda não é publicado online.</p><div class="form-assurance"><span>✓</span><p><strong>Sem mensalidade para começar.</strong><br>O registo básico é gratuito.</p></div></div>
+      <form id="professionalForm" class="form-card"><div class="form-title"><span class="form-step">01</span><div><h3>Dados do profissional</h3><p>Os campos com * são obrigatórios.</p></div></div>
+        <label for="fullName">Nome completo *</label><input id="fullName" name="fullName" required maxlength="80" placeholder="Como se chama?">
+        <label for="serviceCategory">Especialidade *</label><select id="serviceCategory" name="serviceCategory" required><option value="">Escolha o serviço que presta</option><option>Canalização</option><option>Electricidade</option><option>Limpeza</option><option>Construção</option><option>Beleza</option><option>Tecnologia</option><option>Transporte</option><option>Outro</option></select>
+        <label for="province">Província *</label><select id="province" name="province" required><option value="">Onde trabalha?</option><option>Luanda</option><option>Benguela</option><option>Huíla</option><option>Huambo</option><option>Cabinda</option><option>Namibe</option><option>Outra</option></select>
+        <label for="phone">Telefone / WhatsApp *</label><input id="phone" name="phone" type="tel" required maxlength="30" placeholder="Ex.: 923 000 000">
+        <label for="description">Conte-nos o que faz</label><textarea id="description" name="description" rows="3" maxlength="300" placeholder="Experiência, serviços e zonas onde trabalha"></textarea>
+        <button class="button button-primary full" type="submit">Guardar registo de demonstração <span aria-hidden="true">→</span></button><p class="form-footnote">O registo ainda não fica visível para outros utilizadores. A publicação online será activada numa próxima fase.</p><p id="formMessage" class="form-message" role="status"></p>
+      </form>
+    </section>
+    <section class="demo-note"><span aria-hidden="true">i</span><p><strong>Nota sobre esta versão:</strong> o site é um protótipo visual. Os registos ficam guardados apenas no navegador usado para os inserir; a base de dados online, as contas seguras e a aprovação de perfis ainda precisam de ser implementadas.</p></section>
+  </main>
+  <footer class="site-footer"><div class="footer-top"><a class="brand footer-brand" href="#inicio"><span class="brand-symbol">K</span><span class="brand-name">Kamba <strong>Serviços</strong><small>Juntos, conectamos quem precisa a quem sabe fazer.</small></span></a><div class="footer-links"><a href="#servicos">Categorias</a><a href="#profissionais">Profissionais</a><a href="#registar">Registar profissional</a></div></div><div class="footer-bottom"><small>© <span id="year"></span> Kamba Serviços. Todos os direitos reservados.</small><small>Uma forma mais simples de encontrar quem sabe fazer.</small></div></footer>
+  <script src="app.js"></script>
+</body>
+</html>

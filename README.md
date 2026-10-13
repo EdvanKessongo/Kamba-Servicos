@@ -1,27 +1,17 @@
-# Kamba Serviços — MVP de demonstração
+# Kamba Serviços — Design V3
 
-## Funcionalidades nesta versão
-- Interface adaptável a telemóvel e computador.
-- Cadastro de profissionais e pesquisa por serviço/localização.
-- Formulário de pedido de serviço.
-- Perfil público de demonstração e avaliações com nota/comentário.
-- Painel local com pedidos, alteração de estado, remoção de perfil e exportação de dados.
+Versão de demonstração com identidade visual verde e branca, fotografia real, cartões de categorias e layout adaptado a telemóveis.
 
-## Limitação crítica
-Os dados ficam apenas no navegador/dispositivo em que foram criados. Ainda não há contas, sincronização entre clientes, servidor, painel de administrador seguro, moderação central, notificações, pagamentos ou backup remoto. Não usar ainda para recolher dados reais sensíveis nem anunciar como serviço público operacional.
+## Ficheiros
+- `index.html` — estrutura da página.
+- `styles.css` — design, cores, cartões, responsividade e animações subtis.
+- `app.js` — pesquisa por serviço/categoria/província, registo de demonstração e contactos WhatsApp/telefone nos perfis guardados localmente.
+- `manifest.json` — metadados básicos para instalação como aplicação web.
 
-## Testar
-Extrair o ZIP e abrir `index.html` num navegador moderno. Para servir localmente, correr `python -m http.server 8000` dentro da pasta e abrir `http://localhost:8000`.
+## Publicar no GitHub Pages
+Substitua os ficheiros correspondentes no repositório existente e confirme que ficam na pasta principal (`root`) do ramo `main`. O GitHub Pages publicará a alteração depois de os ficheiros serem guardados.
 
-## Arquitectura recomendada para produção
-Frontend: React + TypeScript (ou modernizar este protótipo); backend: Supabase/PostgreSQL com Auth, Storage e políticas RLS; web: alojamento HTTPS; Android: empacotar a aplicação web com Capacitor e testar/assinar o pacote. O backend precisa de regras de acesso e nunca se devem expor chaves secretas no frontend.
+## Limitações importantes
+Esta continua a ser uma demonstração estática. Os registos ficam guardados apenas no navegador e dispositivo onde foram introduzidos. Não há ainda base de dados online, autenticação segura, aprovação administrativa real, upload de fotografias de profissionais, nem sincronização entre dispositivos. Os botões WhatsApp e telefone são gerados para os perfis guardados localmente.
 
-## Próximas fases
-1. Backend remoto e autenticação/verificação de contacto.
-2. Tabelas para utilizadores, profissionais, categorias, pedidos, propostas, avaliações, denúncias e notificações.
-3. Permissões e painel administrativo protegido.
-4. Avaliações apenas ligadas a pedidos concluídos, moderação e auditoria.
-5. Política de privacidade, termos, testes de segurança e acessibilidade.
-6. Publicação web e Android.
-
-Níveis gratuitos de fornecedores podem ter limites e mudar; domínio, SMS/WhatsApp API, utilização adicional e Google Play podem ter custos. Confirmar preços actuais antes de contratar.
+As fotografias de categorias e de destaque são carregadas a partir do Unsplash e precisam de ligação à internet. A primeira utilização de fontes Google também requer ligação.

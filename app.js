@@ -1,16 +1,114 @@
-const C=[["Reparações domésticas","🔧"],["Electricidade","⚡"],["Canalização","🚰"],["Limpeza","🧹"],["Beleza e cuidados","💇"],["Costura","🧵"],["Informática","💻"],["Mecânica","🚗"],["Pintura","🖌️"],["Construção","🧱"],["Explicações","📚"],["Outros serviços","🛠️"]],KP="ks_pros",KR="ks_requests",KV="ks_reviews";
-const $=s=>document.querySelector(s),all=s=>[...document.querySelectorAll(s)],get=k=>JSON.parse(localStorage.getItem(k)||"[]"),put=(k,v)=>localStorage.setItem(k,JSON.stringify(v)),uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6),esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-function toast(s){let t=$("#toast");t.textContent=s;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2800)}
-function options(el,first="Escolhe uma categoria"){el.innerHTML=`<option value="">${first}</option>`+C.map(c=>`<option>${c[0]}</option>`).join("")}
-function go(id){all(".view").forEach(x=>x.classList.add("hidden"));$("#"+id).classList.remove("hidden");$("#nav").classList.remove("open");if(id==="search")renderSearch();if(id==="dashboard")renderDash();scrollTo(0,0)}
-all("[data-view]").forEach(b=>b.onclick=()=>go(b.dataset.view));$("#menu").onclick=()=>$("#nav").classList.toggle("open");
-$("#categories").innerHTML=C.slice(0,8).map(c=>`<button class="category" data-cat="${esc(c[0])}"><span>${c[1]}</span>${esc(c[0])}</button>`).join("");all("[data-cat]").forEach(b=>b.onclick=()=>{go("search");$("#scat").value=b.dataset.cat;renderSearch()});
-options($("#scat"),"Todas as categorias");all(".cats").forEach(e=>options(e));
-function renderSearch(){let q=$("#q").value.toLowerCase(),cat=$("#scat").value,pv=$("#sprov").value.toLowerCase(),mu=$("#smun").value.toLowerCase();let ps=get(KP).filter(p=>(!q||[p.name,p.category,p.description,p.province,p.municipality].join(" ").toLowerCase().includes(q))&&(!cat||p.category===cat)&&(!pv||p.province.toLowerCase().includes(pv))&&(!mu||p.municipality.toLowerCase().includes(mu)));$("#results").innerHTML=ps.length?ps.map(p=>{let rs=get(KV).filter(r=>r.pid===p.id),avg=rs.length?(rs.reduce((a,r)=>a+r.rating,0)/rs.length).toFixed(1):"Sem avaliações";return `<article class="card"><div style="font-size:28px">${C.find(c=>c[0]===p.category)?.[1]||"🛠️"}</div><h3>${esc(p.name)}</h3><span class="tag">${esc(p.category)}</span><span class="tag">${esc(p.availability)}</span><p>📍 ${esc(p.municipality)}, ${esc(p.province)}</p><p>${esc(p.description)}</p><p>${esc(p.price||"Preço a combinar")}</p><p>⭐ ${avg}</p><button class="primary" data-open="${p.id}">Ver perfil</button></article>`}).join(""):'<div class="panel">Não encontrámos profissionais. Tenta outra pesquisa ou regista o primeiro profissional.</div>';all("[data-open]").forEach(b=>b.onclick=()=>profile(b.dataset.open))}
-["q","scat","sprov","smun"].forEach(id=>$("#"+id).addEventListener("input",renderSearch));
-$("#proform").onsubmit=e=>{e.preventDefault();let f=new FormData(e.target),ps=get(KP);ps.push({id:uid(),name:f.get("name").trim(),contact:f.get("contact").trim(),category:f.get("category"),province:f.get("province").trim(),municipality:f.get("municipality").trim(),availability:f.get("availability"),price:f.get("price").trim(),experience:f.get("experience").trim(),description:f.get("description").trim(),created:new Date().toISOString()});put(KP,ps);e.target.reset();toast("Perfil criado neste navegador.");go("search")};
-$("#reqform").onsubmit=e=>{e.preventDefault();let f=new FormData(e.target),rs=get(KR);rs.unshift({id:uid(),client:f.get("client").trim(),contact:f.get("contact").trim(),category:f.get("category"),province:f.get("province").trim(),municipality:f.get("municipality").trim(),when:f.get("when"),description:f.get("description").trim(),status:"Novo pedido",created:new Date().toISOString()});put(KR,rs);e.target.reset();toast("Pedido guardado.");go("dashboard")};
-function profile(pid){let p=get(KP).find(x=>x.id===pid);if(!p)return;let rs=get(KV).filter(r=>r.pid===pid);$("#detail").innerHTML=`<div class="profilebox"><div style="font-size:35px">${C.find(c=>c[0]===p.category)?.[1]||"🛠️"}</div><h1>${esc(p.name)}</h1><span class="tag">${esc(p.category)}</span><span class="tag">${esc(p.availability)}</span><span class="tag">Perfil não verificado</span><p>📍 ${esc(p.municipality)}, ${esc(p.province)}</p><p>${esc(p.description)}</p><p>Preço: ${esc(p.price||"A combinar")} · Experiência: ${esc(p.experience||"Não indicada")}</p><p><b>Contacto:</b> ${esc(p.contact)}</p><p class="note">Confirma identidade, referências e preço antes de contratar. O perfil ainda não foi verificado pela plataforma.</p><button id="copy">Copiar contacto</button><h2>Deixar avaliação</h2><form id="reviewform" class="form"><label>Teu nome<input name="name" required></label><label>Classificação<select name="rating" required><option value="">Escolher</option><option value="5">5 — Excelente</option><option value="4">4 — Muito bom</option><option value="3">3 — Bom</option><option value="2">2 — Fraco</option><option value="1">1 — Muito fraco</option></select></label><label class="wide">Comentário<textarea name="comment" required maxlength="700"></textarea></label><button class="primary wide">Guardar avaliação</button></form><h2>Feedback dos clientes</h2>${rs.length?rs.map(r=>`<div class="review"><b>${esc(r.name)} · ${"★".repeat(r.rating)}</b><p>${esc(r.comment)}</p></div>`).join(""):"<p>Ainda sem avaliações.</p>"}</div>`;go("profile");$("#copy").onclick=async()=>{try{await navigator.clipboard.writeText(p.contact);toast("Contacto copiado")}catch{toast(p.contact)}};$("#reviewform").onsubmit=e=>{e.preventDefault();let f=new FormData(e.target),r=get(KV);r.push({pid,name:f.get("name").trim(),rating:Number(f.get("rating")),comment:f.get("comment").trim(),created:new Date().toISOString()});put(KV,r);toast("Avaliação guardada localmente.");profile(pid)}}
-function renderDash(){let ps=get(KP),rs=get(KR),vs=get(KV);$("#stats").innerHTML=`<div class="stat"><strong>${ps.length}</strong>Profissionais</div><div class="stat"><strong>${rs.length}</strong>Pedidos</div><div class="stat"><strong>${vs.length}</strong>Avaliações</div>`;$("#requests").innerHTML=rs.length?rs.map(r=>`<div class="row"><b>${esc(r.category)} · ${esc(r.municipality)}, ${esc(r.province)}</b><p>${esc(r.client)} · ${esc(r.contact)}</p><p>${esc(r.description)}</p><p>Estado: <b>${esc(r.status)}</b></p><button data-state="${r.id}">Alterar estado</button></div>`).join(""):"<p>Ainda não há pedidos.</p>";$("#pros").innerHTML=ps.length?ps.map(p=>`<div class="row"><b>${esc(p.name)} · ${esc(p.category)}</b><p>${esc(p.contact)} · ${esc(p.municipality)}, ${esc(p.province)}</p><button data-del="${p.id}" class="danger">Remover perfil</button></div>`).join(""):"<p>Ainda não há profissionais.</p>";all("[data-state]").forEach(b=>b.onclick=()=>{let a=get(KR),r=a.find(x=>x.id===b.dataset.state),st=["Novo pedido","Em contacto","Profissional seleccionado","Em andamento","Concluído","Cancelado"];r.status=st[(st.indexOf(r.status)+1)%st.length];put(KR,a);renderDash()});all("[data-del]").forEach(b=>b.onclick=()=>{if(confirm("Remover perfil deste navegador?")){put(KP,get(KP).filter(p=>p.id!==b.dataset.del));renderDash()}})}
-$("#export").onclick=()=>{let blob=new Blob([JSON.stringify({professionals:get(KP),requests:get(KR),reviews:get(KV)},null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="kamba-servicos-dados.json";a.click();URL.revokeObjectURL(a.href)};
-$("#clear").onclick=()=>{if(confirm("Apagar todos os dados deste navegador?")){[KP,KR,KV].forEach(k=>localStorage.removeItem(k));renderDash();toast("Dados apagados.")}};
+(() => {
+  'use strict';
+  const PROFESSIONALS_KEY = 'kamba_servicos_professionals_v1';
+  const REQUESTS_KEY = 'kamba_servicos_requests_v1';
+  const $ = (selector) => document.querySelector(selector);
+  const $$ = (selector) => Array.from(document.querySelectorAll(selector));
+  const safeRead = (key) => {
+    try { const value = JSON.parse(localStorage.getItem(key) || '[]'); return Array.isArray(value) ? value : []; }
+    catch { return []; }
+  };
+  const safeWrite = (key, value) => {
+    try { localStorage.setItem(key, JSON.stringify(value)); return true; }
+    catch { return false; }
+  };
+  let activeCategory = '';
+  let searchText = '';
+  let searchProvince = '';
+  $('#year').textContent = new Date().getFullYear();
+
+  const menuButton = $('#menuButton');
+  const nav = $('#mainNav');
+  menuButton.addEventListener('click', () => {
+    const open = nav.classList.toggle('open');
+    menuButton.setAttribute('aria-expanded', String(open));
+    menuButton.setAttribute('aria-label', open ? 'Fechar menu' : 'Abrir menu');
+    menuButton.textContent = open ? '×' : '☰';
+  });
+  $$('#mainNav a').forEach(link => link.addEventListener('click', () => {
+    nav.classList.remove('open'); menuButton.setAttribute('aria-expanded', 'false'); menuButton.setAttribute('aria-label', 'Abrir menu'); menuButton.textContent = '☰';
+  }));
+
+  function escapeHTML(value) {
+    return String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+  }
+  function cleanAngolaPhone(value) {
+    let digits = String(value || '').replace(/\D/g, '');
+    if (digits.startsWith('00')) digits = digits.slice(2);
+    if (digits.startsWith('244')) digits = digits.slice(3);
+    if (digits.startsWith('0')) digits = digits.slice(1);
+    return digits;
+  }
+  function renderProfessionals() {
+    const all = safeRead(PROFESSIONALS_KEY);
+    const filtered = all.filter(person => {
+      const matchesText = !searchText || `${person.fullName} ${person.serviceCategory} ${person.description}`.toLowerCase().includes(searchText.toLowerCase());
+      const matchesProvince = !searchProvince || person.province === searchProvince;
+      const matchesCategory = !activeCategory || person.serviceCategory === activeCategory;
+      return matchesText && matchesProvince && matchesCategory;
+    });
+    $('#professionalCount').textContent = all.length ? `${all.length} profissional(is) neste navegador` : 'Os primeiros profissionais podem começar aqui.';
+    const list = $('#professionalList');
+    if (!filtered.length) {
+      list.innerHTML = `<div class="empty-state"><div class="empty-photo"><img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1000&q=85" alt="Profissional a trabalhar numa obra" loading="lazy"></div><div class="empty-copy"><span class="eyebrow">${all.length ? 'TENTE OUTRA PESQUISA' : 'A REDE ESTÁ A CRESCER'}</span><h3>${all.length ? 'Não encontrámos resultados.' : 'Seja dos primeiros a ser encontrado.'}</h3><p>${all.length ? 'Experimente outra palavra, categoria ou província.' : 'Estamos a preparar o directório. Se presta serviços, registe-se gratuitamente para dar o primeiro passo.'}</p><a class="button button-primary" href="#registar">Registar como profissional <span aria-hidden="true">→</span></a></div></div>`;
+      return;
+    }
+    list.innerHTML = filtered.map(person => {
+      const phone = String(person.phone || '').trim();
+      const waNumber = cleanAngolaPhone(phone);
+      const whatsappHref = waNumber ? `https://wa.me/244${waNumber}` : '';
+      const telHref = phone ? `tel:${phone.replace(/[^+\d]/g, '')}` : '';
+      return `<article class="professional-card"><p class="eyebrow">PROFISSIONAL LOCAL</p><h3>${escapeHTML(person.fullName)}</h3><span class="specialty">${escapeHTML(person.serviceCategory)}</span><p><b>Localização:</b> ${escapeHTML(person.province)}</p>${person.description ? `<p>${escapeHTML(person.description)}</p>` : ''}<div class="contact-actions">${whatsappHref ? `<a class="contact-link whatsapp" href="${whatsappHref}" target="_blank" rel="noopener noreferrer">WhatsApp ↗</a>` : ''}${telHref ? `<a class="contact-link" href="${telHref}">Ligar ${escapeHTML(phone)}</a>` : ''}</div><p class="form-footnote">Perfil de demonstração guardado neste navegador.</p><button class="remove-button" type="button" data-remove="${escapeHTML(person.id)}">Remover registo deste navegador</button></article>`;
+    }).join('');
+    $$('[data-remove]').forEach(button => button.addEventListener('click', () => {
+      const id = button.getAttribute('data-remove');
+      if (!confirm('Queres remover este registo deste navegador?')) return;
+      safeWrite(PROFESSIONALS_KEY, safeRead(PROFESSIONALS_KEY).filter(person => person.id !== id));
+      renderProfessionals();
+    }));
+  }
+  $('#professionalForm').addEventListener('submit', event => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const data = new FormData(form);
+    const person = {
+      id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
+      fullName: String(data.get('fullName') || '').trim(),
+      serviceCategory: String(data.get('serviceCategory') || ''),
+      province: String(data.get('province') || ''),
+      phone: String(data.get('phone') || '').trim(),
+      description: String(data.get('description') || '').trim(),
+      createdAt: new Date().toISOString()
+    };
+    const all = safeRead(PROFESSIONALS_KEY);
+    all.unshift(person);
+    if (!safeWrite(PROFESSIONALS_KEY, all)) {
+      $('#formMessage').textContent = 'Não foi possível guardar neste navegador. Verifique o espaço disponível.';
+      return;
+    }
+    form.reset();
+    $('#formMessage').textContent = 'Registo de demonstração guardado neste navegador. Ainda não está publicado online.';
+    activeCategory = '';
+    $$('.category-card').forEach(button => button.classList.remove('active'));
+    searchText = ''; searchProvince = '';
+    $('#searchInput').value = ''; $('#provinceFilter').value = '';
+    renderProfessionals();
+    $('#profissionais').scrollIntoView({behavior:'smooth'});
+  });
+  $('#searchForm').addEventListener('submit', event => {
+    event.preventDefault();
+    searchText = $('#searchInput').value.trim();
+    searchProvince = $('#provinceFilter').value;
+    renderProfessionals();
+    $('#profissionais').scrollIntoView({behavior:'smooth'});
+  });
+  $$('.category-card').forEach(button => button.addEventListener('click', () => {
+    const category = button.getAttribute('data-category');
+    activeCategory = activeCategory === category ? '' : category;
+    $$('.category-card').forEach(item => item.classList.toggle('active', item.getAttribute('data-category') === activeCategory));
+    searchText = ''; $('#searchInput').value = '';
+    renderProfessionals();
+    $('#profissionais').scrollIntoView({behavior:'smooth'});
+  }));
+  renderProfessionals();
+})();
