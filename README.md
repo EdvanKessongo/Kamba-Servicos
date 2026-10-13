@@ -1,17 +1,18 @@
-# Kamba Serviços — Design V3
+# Kamba Serviços — Design V4
 
-Versão de demonstração com identidade visual verde e branca, fotografia real, cartões de categorias e layout adaptado a telemóveis.
+Protótipo mobile-first para o marketplace de serviços em Angola.
 
-## Ficheiros
-- `index.html` — estrutura da página.
-- `styles.css` — design, cores, cartões, responsividade e animações subtis.
-- `app.js` — pesquisa por serviço/categoria/província, registo de demonstração e contactos WhatsApp/telefone nos perfis guardados localmente.
-- `manifest.json` — metadados básicos para instalação como aplicação web.
-
-## Publicar no GitHub Pages
-Substitua os ficheiros correspondentes no repositório existente e confirme que ficam na pasta principal (`root`) do ramo `main`. O GitHub Pages publicará a alteração depois de os ficheiros serem guardados.
+## Incluído nesta versão
+- Categorias ampliadas para vários tipos de serviço, com opção para outras especialidades.
+- Lista das 21 províncias de Angola.
+- Pesquisa por serviço, província, município e bairro/comuna.
+- Formulário de perfil com especialidade específica e modalidade de atendimento (domicílio, estabelecimento ou online).
+- Contacto por WhatsApp e telefone.
+- Tratamento de falha de imagens remotas com imagem de substituição.
+- Layout adaptável a telemóveis.
 
 ## Limitações importantes
-Esta continua a ser uma demonstração estática. Os registos ficam guardados apenas no navegador e dispositivo onde foram introduzidos. Não há ainda base de dados online, autenticação segura, aprovação administrativa real, upload de fotografias de profissionais, nem sincronização entre dispositivos. Os botões WhatsApp e telefone são gerados para os perfis guardados localmente.
+Esta continua a ser uma demonstração estática. Os perfis ficam apenas no armazenamento local do navegador e não são partilhados entre dispositivos nem publicados para outros clientes. Para produção será necessário ligar uma base de dados e armazenamento online, autenticação de profissionais, moderação administrativa e regras de privacidade/segurança. As localizações são campos escritos pelos profissionais nesta versão; a validação por listas geográficas será uma melhoria posterior.
 
-As fotografias de categorias e de destaque são carregadas a partir do Unsplash e precisam de ligação à internet. A primeira utilização de fontes Google também requer ligação.
+## Publicação
+Substitua os ficheiros do repositório GitHub Pages pelos cinco ficheiros desta pasta: `index.html`, `styles.css`, `app.js`, `manifest.json` e `README.md`.
